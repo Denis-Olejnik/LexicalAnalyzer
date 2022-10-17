@@ -81,6 +81,7 @@ namespace LexicalAnalyzer
 
             foreach (char c in fileContent + " ")
             {
+                
                 if (Analyzer.IsLogical(previousChars) && (c == ' ' || c == ';'))
                 {
                     counter++;

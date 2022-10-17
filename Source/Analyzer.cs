@@ -13,8 +13,58 @@ using System.Windows.Forms;
 
 namespace LexicalAnalyzer
 {
+    /// <summary>
+    /// The class expands the base dictionary. This class stores all base service words.
+    /// </summary>
+    internal class ServiceWordsDictionary
+    {
+        /// <summary>
+        /// This dictionary contains a list of all service words.
+        /// For example: "Condition" : "true", "false"
+        /// </summary>
+        public static Dictionary<string, List<string>> serviceWords = new Dictionary<string, List<string>>()
+        {
+            {"Condition", new List<string> { "if", "else" } },
+            {"Statement", new List<string>{ "true", "false"} },
+            {"Logical", new List<string> {"xor", "or", "and", "not"} }
+        };
+
+        /// <summary>
+        /// The method takes a service word and compares it against the service word dictionary. 
+        /// It returns the name of the service category, for example "Statement".
+        /// </summary>
+        /// <param name="word">The word to be found</param>
+        /// <returns>Returns the name of the category in which the passed word was found. 
+        /// If no word is found, it returns string "None".</returns>
+        public static string FindServiceWordCategory(string word)
+        {
+            // Read every key and get his values
+            foreach (KeyValuePair<string, List<string>> keyValuePair in serviceWords)
+            {
+                string key = keyValuePair.Key;
+                List<string> values = keyValuePair.Value;
+
+                foreach (var serviceWord in values)
+                {
+                    if (serviceWord == word) return key;
+                }
+            }
+            return "None";
+        }
+    }
+
     internal class Analyzer
     {
+        public static bool IsServiceWord(string text)
+        {
+            string returnValue = ServiceWordsDictionary.FindServiceWordCategory(text);
+            if (returnValue != "None")
+            {
+                return true;
+            }
+            return false;
+        }
+
         public static bool IsSemicolon(string text)
         {
             return (text == ";");
