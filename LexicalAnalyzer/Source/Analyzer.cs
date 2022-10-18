@@ -1,15 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-/*
- * It is necessary to replace this implementation with normal code. 
- * For example, value pairs: "type" : "value_1", "value_2"
- * "Operator" : '=', '>', '<', '+', '-', etc.
-*/
 
 namespace LexicalAnalyzer
 {
@@ -22,11 +12,11 @@ namespace LexicalAnalyzer
         /// This dictionary contains a list of all service words.
         /// For example: "Condition" : "true", "false"
         /// </summary>
-        public static Dictionary<string, List<string>> serviceWords = new Dictionary<string, List<string>>()
+        public static readonly Dictionary<string, List<string>> serviceWords = new Dictionary<string, List<string>>()
         {
             {"Condition", new List<string> { "if", "else" } },
             {"Statement", new List<string>{ "true", "false"} },
-            {"Logical", new List<string> {"xor", "or", "and", "not"} }
+            {"Logical", new List<string> {"xor", "or", "and", "not"} },
         };
 
         /// <summary>
@@ -55,29 +45,31 @@ namespace LexicalAnalyzer
 
     internal class Analyzer
     {
-        public static bool IsServiceWord(string text)
+        /// <summary>
+        /// Returns the list with the category name of the function word. {"true", "Statement"}. 
+        /// If the service word is not found - it returns {"false", "None"}. 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static List<string> IsServiceWord(string text)
         {
-            string returnValue = ServiceWordsDictionary.FindServiceWordCategory(text);
-            if (returnValue != "None")
+            string serviceWordCategory = ServiceWordsDictionary.FindServiceWordCategory(text);
+            var serviceWordList = new List<string>();
+
+            if (serviceWordCategory != "None")
             {
-                return true;
+                serviceWordList.Add("true");
+                serviceWordList.Add(serviceWordCategory);
+                return serviceWordList;
             }
-            return false;
+            serviceWordList.Add("false");
+            serviceWordList.Add("None");
+            return serviceWordList;
         }
 
         public static bool IsSemicolon(string text)
         {
             return (text == ";");
-        }
-        
-        public static bool IsCondition(string text)
-        {
-            return (text == "if" || text == "else");
-        }
-
-        public static bool IsStatement(string text)
-        {
-            return (text == "true" || text == "false");
         }
 
         public static bool IsBracket(string text)
@@ -113,10 +105,18 @@ namespace LexicalAnalyzer
             
         }
 
+        public static bool IsCondition(string text)
+        {
+            return (text == "if" || text == "else");
+        }
+        public static bool IsStatement(string text)
+        {
+            return (text == "true" || text == "false");
+        }
+
         public static bool IsLogical(string text)
         {
             return (text == "or" || text == "xor" || text == "and" || text == "not");
         }
-
     }
 }

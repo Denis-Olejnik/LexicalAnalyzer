@@ -1,0 +1,16 @@
+if:
+	' ' if (
+	'(' if(
+
+else:
+	' ' else {
+	'{' else{
+	'\n' else \n
+
+true:
+	' ' true OR ...
+	')' true)
+	';' true;
+
+xor:
+	' ' xor X
