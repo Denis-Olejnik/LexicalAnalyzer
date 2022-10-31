@@ -32,7 +32,7 @@
             this.tabPage_sourceFile = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBox_FileViewer = new System.Windows.Forms.TextBox();
-            this.button_loadFile = new System.Windows.Forms.Button();
+            this.button_openFile = new System.Windows.Forms.Button();
             this.textBox_FilePath = new System.Windows.Forms.TextBox();
             this.tabPage_LexicalTable = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -57,7 +57,6 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(785, 460);
             this.tabControl1.TabIndex = 0;
-            this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
             // 
             // tabPage_sourceFile
             // 
@@ -73,7 +72,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.textBox_FileViewer);
-            this.groupBox1.Controls.Add(this.button_loadFile);
+            this.groupBox1.Controls.Add(this.button_openFile);
             this.groupBox1.Controls.Add(this.textBox_FilePath);
             this.groupBox1.Location = new System.Drawing.Point(8, 6);
             this.groupBox1.Name = "groupBox1";
@@ -92,16 +91,16 @@
             this.textBox_FileViewer.Size = new System.Drawing.Size(748, 369);
             this.textBox_FileViewer.TabIndex = 2;
             // 
-            // button_loadFile
+            // button_openFile
             // 
-            this.button_loadFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
-            this.button_loadFile.Location = new System.Drawing.Point(625, 18);
-            this.button_loadFile.Name = "button_loadFile";
-            this.button_loadFile.Size = new System.Drawing.Size(129, 22);
-            this.button_loadFile.TabIndex = 1;
-            this.button_loadFile.Text = "Load file";
-            this.button_loadFile.UseVisualStyleBackColor = true;
-            this.button_loadFile.Click += new System.EventHandler(this.button_loadFile_Click);
+            this.button_openFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.button_openFile.Location = new System.Drawing.Point(625, 18);
+            this.button_openFile.Name = "button_openFile";
+            this.button_openFile.Size = new System.Drawing.Size(129, 22);
+            this.button_openFile.TabIndex = 1;
+            this.button_openFile.Text = "Open file";
+            this.button_openFile.UseVisualStyleBackColor = true;
+            this.button_openFile.Click += new System.EventHandler(this.button_openFile_Click);
             // 
             // textBox_FilePath
             // 
@@ -109,6 +108,7 @@
             this.textBox_FilePath.Name = "textBox_FilePath";
             this.textBox_FilePath.Size = new System.Drawing.Size(613, 20);
             this.textBox_FilePath.TabIndex = 0;
+            this.textBox_FilePath.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_FilePath_KeyPress);
             // 
             // tabPage_LexicalTable
             // 
@@ -195,7 +195,7 @@
         private System.Windows.Forms.TabPage tabPage_sourceFile;
         private System.Windows.Forms.TabPage tabPage_LexicalTable;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button button_loadFile;
+        private System.Windows.Forms.Button button_openFile;
         private System.Windows.Forms.TextBox textBox_FilePath;
         private System.Windows.Forms.TextBox textBox_FileViewer;
         private System.Windows.Forms.DataGridView dataGridView_table;

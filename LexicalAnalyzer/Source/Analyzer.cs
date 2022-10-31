@@ -1,5 +1,8 @@
-﻿using System;
+﻿using LexicalAnalyzer.LexicalAnalyzer.Source;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
 
 namespace LexicalAnalyzer
 {
@@ -12,21 +15,22 @@ namespace LexicalAnalyzer
         /// This dictionary contains a list of all service words.
         /// For example: "Condition" : "true", "false"
         /// </summary>
-        public static readonly Dictionary<string, List<string>> serviceWords = new Dictionary<string, List<string>>()
+        public readonly Dictionary<string, List<string>> serviceWords = new Dictionary<string, List<string>>()
         {
-            {"Condition", new List<string> { "if", "else" } },
-            {"Statement", new List<string>{ "true", "false"} },
-            {"Logical", new List<string> {"xor", "or", "and", "not"} },
+            {"Condition", new List<string> { "if", "else", } },
+            {"Statement", new List<string>{ "true", "false", } },
+            {"Logical", new List<string> {"xor", "or", "and", "not", } },
+            {"Service", new List<string> {"program", "var", "begin", "write", "writeln", "for", "to", "do", "random", "randomize", "end"} },
+            {"Variable type", new List<string> {"integer", } }
         };
 
         /// <summary>
-        /// The method takes a service word and compares it against the service word dictionary. 
-        /// It returns the name of the service category, for example "Statement".
+        /// The method takes a word and compares it against the service word dictionary. 
         /// </summary>
         /// <param name="word">The word to be found</param>
         /// <returns>Returns the name of the category in which the passed word was found. 
-        /// If no word is found, it returns string "None".</returns>
-        public static string FindServiceWordCategory(string word)
+        /// If no word is found, it returns null.</returns>
+        public string FindServiceWordCategory(string word)
         {
             // Read every key and get his values
             foreach (KeyValuePair<string, List<string>> keyValuePair in serviceWords)
@@ -39,84 +43,248 @@ namespace LexicalAnalyzer
                     if (serviceWord == word) return key;
                 }
             }
-            return "None";
+            return null;
+        }
+
+        public bool isDelimiter(string symbol)
+        {
+            List<string> delimiters = new List<string>()
+            {
+                ".", ";", ",", "(", ")", "+", "-", "*", "/", "=", ">", "<",
+            };
+            return delimiters.Contains(symbol);
         }
     }
 
     internal class Analyzer
     {
+        private enum States { SCANNING, IS_WORD, IS_CONST, IS_DELIMITER, IS_ASSIGN, IS_COMMENT, ERROR, FINISHED, };
+        private States _state;
+        
+        private ServiceWordsDictionary _serviceWordsDict = new ServiceWordsDictionary();
+        public readonly List<Lex> lexemesList = new List<Lex>();
+
+        // File reader: 
+        private StringReader stringReader;
+        private char[] currentChar = new char[1] { '\0' }; // A symbol that passes inspection
+        private string bufferOfChars = string.Empty; // The previous characters of the word are stored here
+
+        private int tempInt = 0; // TempInt stores a converted integer value obtained from char
+                                 // (tempInt = tempInt * 10 + (int)(currentChar[0] - '0');)
+
+        string error_message = "Unexpected error!"; // The variable stores a description of the error
+
+        private bool CharIsInvalid(char symbol)
+        {
+            return (currentChar[0] == ' ' || currentChar[0] == '\n' || currentChar[0] == '\t' ||
+                    currentChar[0] == '\0' || currentChar[0] == '\r');
+        }
+
         /// <summary>
-        /// Returns the list with the category name of the function word. {"true", "Statement"}. 
-        /// If the service word is not found - it returns {"false", "None"}. 
+        /// Writes the next char to currentChar
         /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public static List<string> IsServiceWord(string text)
+        private void GetNextChar()
         {
-            string serviceWordCategory = ServiceWordsDictionary.FindServiceWordCategory(text);
-            var serviceWordList = new List<string>();
+            stringReader.Read(currentChar, 0, 1);
+        }
 
-            if (serviceWordCategory != "None")
+        private void ClearBuffer()
+        {
+            bufferOfChars = string.Empty;
+        }
+
+        /// <summary>
+        /// Adds symbol to bufferOfChars
+        /// </summary>
+        /// <param name="symbol">Current char to be added to the buffer</param>
+        private void AddToBuffer(char symbol)
+        {
+            bufferOfChars += symbol;
+        }
+
+        private void AddToLexemesList(List<Lex> _lexemesList, string wordType, string wordBuffer)
+        {
+            _lexemesList.Add(new Lex(wordType, wordBuffer));
+        }
+
+        public List<Lex> getLexemesList(string text)
+        {
+            AnalyzeLexemes(text);
+            return lexemesList;
+        }
+
+        private void AnalyzeLexemes(string text)
+        {
+            try
             {
-                serviceWordList.Add("true");
-                serviceWordList.Add(serviceWordCategory);
-                return serviceWordList;
-            }
-            serviceWordList.Add("false");
-            serviceWordList.Add("None");
-            return serviceWordList;
-        }
+                stringReader = new StringReader(text);
 
-        public static bool IsSemicolon(string text)
-        {
-            return (text == ";");
-        }
-
-        public static bool IsBracket(string text)
-        {
-            return (text == "(" || text == ")");
-        }
-
-        public static bool IsAssignOperator(string text)
-        {
-            return (text == "=" || text == ":=");
-        }
-
-        // What happens if a variable starts with an underscore,
-        // aka a private variable?
-        public static bool IsVariable(string text)
-        {
-            if (text.Length == 0 || !Char.IsLetter(text[0]))
-            {
-                return false;
-            }
-            else
-            {
-                foreach (char c in text)
+                while (_state != States.FINISHED)
                 {
-                    if (c != '_' && !Char.IsDigit(c) && !Char.IsLetter(c))
+                    switch (_state)
                     {
-                        return false;
+                        // This state checks for matches with the list of lexemes, as well as for specific characters
+                        case States.SCANNING:
+                            if (CharIsInvalid(currentChar[0]))
+                            {
+                                GetNextChar();
+                            }
+                            else if (char.IsLetter(currentChar[0]))
+                            {
+                                ClearBuffer();
+                                AddToBuffer(currentChar[0]);
+                                GetNextChar();
+                                _state = States.IS_WORD;
+                            }
+                            else if (char.IsDigit(currentChar[0]))
+                            {
+                                tempInt = (int)(currentChar[0] - '0');
+                                AddToBuffer(currentChar[0]);
+                                GetNextChar();
+                                _state = States.IS_CONST;
+                            }
+                            else if (currentChar[0] == '{')
+                            {
+                                ClearBuffer();
+                                AddToBuffer(currentChar[0]);
+                                GetNextChar();
+                                _state = States.IS_COMMENT;
+                            }
+                            else if (currentChar[0] == ':')
+                            {
+                                ClearBuffer();
+                                AddToBuffer(currentChar[0]);
+                                GetNextChar();
+                                _state = States.IS_ASSIGN;
+                            }
+                            else if (currentChar[0] == '.')
+                            {
+                                AddToLexemesList(lexemesList, "End of program", currentChar[0].ToString());
+                                MessageBox.Show("Successfuly!", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                _state = States.FINISHED;
+                            }
+                            else
+                            {
+                                _state = States.IS_DELIMITER;
+                            }
+                            break;
+
+                        // This state tries to find a service word equal to the word in the buffer
+                        case States.IS_WORD:
+                            if (char.IsLetterOrDigit(currentChar[0]))
+                            {
+                                AddToBuffer(currentChar[0]);
+                                GetNextChar();
+                            }
+                            else
+                            {
+                                string serviceWordType = _serviceWordsDict.FindServiceWordCategory(bufferOfChars);
+
+                                // Found service word from the dictionary
+                                if (serviceWordType != null)
+                                {
+                                    AddToLexemesList(lexemesList, serviceWordType, bufferOfChars);
+                                }
+                                // If the word is not found in the dictionary, write it as "Variable"
+                                else
+                                {
+                                    AddToLexemesList(lexemesList, "Variable", bufferOfChars);
+                                }
+                                ClearBuffer();
+                                _state = States.SCANNING;
+                            }
+                            break;
+
+                        // This state looks for constants
+                        // TODO: Implement float recognition
+                        case States.IS_CONST:
+                            if (char.IsDigit(currentChar[0]))
+                            {
+                                tempInt = tempInt * 10 + (int)(currentChar[0] - '0');
+                                AddToBuffer(currentChar[0]);
+                                GetNextChar();
+                            }
+                            else
+                            {
+                                AddToLexemesList(lexemesList, "Constant", bufferOfChars);
+                                ClearBuffer();
+                                _state = States.SCANNING;
+                            }
+                            break;
+
+                        case States.IS_DELIMITER:
+                            ClearBuffer();
+                            AddToBuffer(currentChar[0]);
+                            if (_serviceWordsDict.isDelimiter(bufferOfChars))
+                            {
+                                AddToLexemesList(lexemesList, "Delimiter", currentChar[0].ToString());
+                                ClearBuffer();
+                                GetNextChar();
+                                _state = States.SCANNING;
+                            }
+                            else
+                            {
+                                _state = States.ERROR;
+                            }
+                            break;
+
+                        case States.IS_ASSIGN:
+                            if (currentChar[0] == '=')
+                            {
+                                AddToBuffer(currentChar[0]);
+                                AddToLexemesList(lexemesList, "Assign", bufferOfChars);
+                                ClearBuffer();
+                                GetNextChar();
+                            }
+                            else
+                            {
+                                AddToLexemesList(lexemesList, "Type delimiter", bufferOfChars);
+                            }
+                            _state = States.SCANNING;
+                            break;
+
+                        case States.IS_COMMENT:
+                            bool bClosingBlockFound = false;
+
+                            AddToLexemesList(lexemesList, "Start of comment block", bufferOfChars);
+                            ClearBuffer();
+
+                            while (stringReader.Peek() >= 0)
+                            {
+                                GetNextChar();
+                                if (currentChar[0] == '}')
+                                {
+                                    bClosingBlockFound = true;
+                                    break;
+                                }
+                            }
+                            if (!bClosingBlockFound)
+                            {
+                                error_message = "The lexical analyzer did not encounter a closing comment symbol";
+                                _state = States.ERROR;
+                            }
+                            
+                            AddToLexemesList(lexemesList, "End of comment block", currentChar[0].ToString());
+                            GetNextChar();
+                            _state = States.SCANNING;
+                            break;
+
+                        case States.ERROR:
+                            MessageBox.Show(error_message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            _state = States.FINISHED;
+                            break;
+
+                        default:
+                            break;
                     }
                 }
             }
+            catch (Exception _err)
+            {
+                MessageBox.Show(_err.Message, "Exception", MessageBoxButtons.OK);
+                throw;
+            }
 
-            return true;
-            
-        }
-
-        public static bool IsCondition(string text)
-        {
-            return (text == "if" || text == "else");
-        }
-        public static bool IsStatement(string text)
-        {
-            return (text == "true" || text == "false");
-        }
-
-        public static bool IsLogical(string text)
-        {
-            return (text == "or" || text == "xor" || text == "and" || text == "not");
         }
     }
 }
