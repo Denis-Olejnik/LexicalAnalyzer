@@ -28,11 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage_sourceFile = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBox_FileViewer = new System.Windows.Forms.TextBox();
-            this.button_loadFile = new System.Windows.Forms.Button();
+            this.button_openFile = new System.Windows.Forms.Button();
             this.textBox_FilePath = new System.Windows.Forms.TextBox();
             this.tabPage_LexicalTable = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -57,7 +58,6 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(785, 460);
             this.tabControl1.TabIndex = 0;
-            this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
             // 
             // tabPage_sourceFile
             // 
@@ -73,7 +73,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.textBox_FileViewer);
-            this.groupBox1.Controls.Add(this.button_loadFile);
+            this.groupBox1.Controls.Add(this.button_openFile);
             this.groupBox1.Controls.Add(this.textBox_FilePath);
             this.groupBox1.Location = new System.Drawing.Point(8, 6);
             this.groupBox1.Name = "groupBox1";
@@ -84,6 +84,7 @@
             // 
             // textBox_FileViewer
             // 
+            this.textBox_FileViewer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
             this.textBox_FileViewer.Location = new System.Drawing.Point(6, 46);
             this.textBox_FileViewer.Multiline = true;
             this.textBox_FileViewer.Name = "textBox_FileViewer";
@@ -92,16 +93,16 @@
             this.textBox_FileViewer.Size = new System.Drawing.Size(748, 369);
             this.textBox_FileViewer.TabIndex = 2;
             // 
-            // button_loadFile
+            // button_openFile
             // 
-            this.button_loadFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
-            this.button_loadFile.Location = new System.Drawing.Point(625, 18);
-            this.button_loadFile.Name = "button_loadFile";
-            this.button_loadFile.Size = new System.Drawing.Size(129, 22);
-            this.button_loadFile.TabIndex = 1;
-            this.button_loadFile.Text = "Load file";
-            this.button_loadFile.UseVisualStyleBackColor = true;
-            this.button_loadFile.Click += new System.EventHandler(this.button_loadFile_Click);
+            this.button_openFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.button_openFile.Location = new System.Drawing.Point(625, 18);
+            this.button_openFile.Name = "button_openFile";
+            this.button_openFile.Size = new System.Drawing.Size(129, 22);
+            this.button_openFile.TabIndex = 1;
+            this.button_openFile.Text = "Open file";
+            this.button_openFile.UseVisualStyleBackColor = true;
+            this.button_openFile.Click += new System.EventHandler(this.button_openFile_Click);
             // 
             // textBox_FilePath
             // 
@@ -109,6 +110,7 @@
             this.textBox_FilePath.Name = "textBox_FilePath";
             this.textBox_FilePath.Size = new System.Drawing.Size(613, 20);
             this.textBox_FilePath.TabIndex = 0;
+            this.textBox_FilePath.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_FilePath_KeyPress);
             // 
             // tabPage_LexicalTable
             // 
@@ -135,15 +137,29 @@
             // 
             this.dataGridView_table.AllowUserToAddRows = false;
             this.dataGridView_table.AllowUserToDeleteRows = false;
-            this.dataGridView_table.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView_table.AllowUserToResizeColumns = false;
+            this.dataGridView_table.AllowUserToResizeRows = false;
+            this.dataGridView_table.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridView_table.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Number,
             this.Type,
             this.Value});
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.ControlDark;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView_table.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView_table.Location = new System.Drawing.Point(6, 19);
             this.dataGridView_table.MultiSelect = false;
             this.dataGridView_table.Name = "dataGridView_table";
             this.dataGridView_table.ReadOnly = true;
+            this.dataGridView_table.RowHeadersVisible = false;
+            this.dataGridView_table.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridView_table.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridView_table.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView_table.Size = new System.Drawing.Size(748, 396);
             this.dataGridView_table.TabIndex = 0;
             // 
@@ -152,6 +168,7 @@
             this.Number.HeaderText = "Number";
             this.Number.Name = "Number";
             this.Number.ReadOnly = true;
+            this.Number.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Number.Width = 200;
             // 
             // Type
@@ -159,14 +176,16 @@
             this.Type.HeaderText = "Type";
             this.Type.Name = "Type";
             this.Type.ReadOnly = true;
-            this.Type.Width = 270;
+            this.Type.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Type.Width = 245;
             // 
             // Value
             // 
             this.Value.HeaderText = "Value";
             this.Value.Name = "Value";
             this.Value.ReadOnly = true;
-            this.Value.Width = 235;
+            this.Value.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Value.Width = 300;
             // 
             // MainForm
             // 
@@ -195,7 +214,7 @@
         private System.Windows.Forms.TabPage tabPage_sourceFile;
         private System.Windows.Forms.TabPage tabPage_LexicalTable;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button button_loadFile;
+        private System.Windows.Forms.Button button_openFile;
         private System.Windows.Forms.TextBox textBox_FilePath;
         private System.Windows.Forms.TextBox textBox_FileViewer;
         private System.Windows.Forms.DataGridView dataGridView_table;

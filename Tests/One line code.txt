@@ -1,0 +1,1 @@
+program bool;var x,y:boolean;begin x:=trrue;y:=false;y:=false1;if x=true then writeln (x);end.
