@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage_sourceFile = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -83,6 +84,7 @@
             // 
             // textBox_FileViewer
             // 
+            this.textBox_FileViewer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
             this.textBox_FileViewer.Location = new System.Drawing.Point(6, 46);
             this.textBox_FileViewer.Multiline = true;
             this.textBox_FileViewer.Name = "textBox_FileViewer";
@@ -135,15 +137,29 @@
             // 
             this.dataGridView_table.AllowUserToAddRows = false;
             this.dataGridView_table.AllowUserToDeleteRows = false;
-            this.dataGridView_table.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView_table.AllowUserToResizeColumns = false;
+            this.dataGridView_table.AllowUserToResizeRows = false;
+            this.dataGridView_table.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridView_table.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Number,
             this.Type,
             this.Value});
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.ControlDark;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView_table.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView_table.Location = new System.Drawing.Point(6, 19);
             this.dataGridView_table.MultiSelect = false;
             this.dataGridView_table.Name = "dataGridView_table";
             this.dataGridView_table.ReadOnly = true;
+            this.dataGridView_table.RowHeadersVisible = false;
+            this.dataGridView_table.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridView_table.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridView_table.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView_table.Size = new System.Drawing.Size(748, 396);
             this.dataGridView_table.TabIndex = 0;
             // 
@@ -152,6 +168,7 @@
             this.Number.HeaderText = "Number";
             this.Number.Name = "Number";
             this.Number.ReadOnly = true;
+            this.Number.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Number.Width = 200;
             // 
             // Type
@@ -159,14 +176,16 @@
             this.Type.HeaderText = "Type";
             this.Type.Name = "Type";
             this.Type.ReadOnly = true;
-            this.Type.Width = 270;
+            this.Type.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Type.Width = 245;
             // 
             // Value
             // 
             this.Value.HeaderText = "Value";
             this.Value.Name = "Value";
             this.Value.ReadOnly = true;
-            this.Value.Width = 235;
+            this.Value.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Value.Width = 300;
             // 
             // MainForm
             // 

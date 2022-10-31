@@ -56,6 +56,11 @@ namespace LexicalAnalyzer
             {
                 if (File.Exists(textBox_FilePath.Text))
                 {
+                    using (StreamReader reader = new StreamReader(textBox_FilePath.Text))
+                    {
+                        string fileContent = reader.ReadToEnd();
+                        textBox_FileViewer.Text = fileContent;
+                    }
                     addListLexToDataTableView();
                 }
             }

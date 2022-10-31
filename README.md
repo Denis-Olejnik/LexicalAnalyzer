@@ -1,12 +1,17 @@
-
 # Lexical analyzer
 
 The program performs lexical analysis of a program written in the Pascal programming language.
 
-![Alt text](/readme/LexicalAnalyzer_1.png?raw=true "asd")
+![OnStartupPic](/readme/LexicalAnalyzer_OnStartup.png?raw=true)
 
-![Alt text](/readme/LexicalAnalyzer_2.png?raw=true "asd")
+![ReadsFilePic](/readme/LexicalAnalyzer_ReadsFile.png?raw=true)
 
-![Alt text](/readme/LexicalAnalyzer_3.png?raw=true "asd")
-## Disadvantages:
--- Floating point numbers recognition is not implemented
+![LexicalTablePic](/readme/LexicalAnalyzer_LexicalTable.png?raw=true)
+
+![ErrorExamplePic](/readme/LexicalAnalyzer_ErrorExample.png?raw=true)
+
+## Not implemented:
+- Floating point number detection
+- Arrays[]
+- ...
+- A lot of other things.

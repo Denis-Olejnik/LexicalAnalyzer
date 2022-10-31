@@ -21,7 +21,7 @@ namespace LexicalAnalyzer
             {"Statement", new List<string>{ "true", "false", } },
             {"Logical", new List<string> {"xor", "or", "and", "not", } },
             {"Service", new List<string> {"program", "var", "begin", "write", "writeln", "for", "to", "do", "random", "randomize", "end"} },
-            {"Variable type", new List<string> {"integer", } }
+            {"Variable type", new List<string> {"integer", "boolean", } }
         };
 
         /// <summary>
@@ -69,10 +69,13 @@ namespace LexicalAnalyzer
         private char[] currentChar = new char[1] { '\0' }; // A symbol that passes inspection
         private string bufferOfChars = string.Empty; // The previous characters of the word are stored here
 
-        private int tempInt = 0; // TempInt stores a converted integer value obtained from char
-                                 // (tempInt = tempInt * 10 + (int)(currentChar[0] - '0');)
+        // TempInt stores a converted integer value obtained from char (tempInt = tempInt * 10 + (int)(currentChar[0] - '0');)
+        private int tempInt = 0;
 
-        string error_message = "Unexpected error!"; // The variable stores a description of the error
+        // Number of new characters from stringReader. 0 - no new characters found. Exit the loop. 
+        private int countOfNewSymbols;
+
+        string error_message = "Unexpected error!"; // The variable stores a description of the error (States.ERROR)
 
         private bool CharIsInvalid(char symbol)
         {
@@ -81,11 +84,23 @@ namespace LexicalAnalyzer
         }
 
         /// <summary>
-        /// Writes the next char to currentChar
+        /// Writes the next char to currentChar. 
+        /// 
+        /// Warning: Kludge detected. Since the FSM state changes here, we must call this method last.
+        /// (In order to overwrite the FSM state)
         /// </summary>
         private void GetNextChar()
         {
-            stringReader.Read(currentChar, 0, 1);
+            countOfNewSymbols = stringReader.Read(currentChar, 0, 1);
+
+            // If no new characters are found in the string:
+            if (countOfNewSymbols == 0)
+            {
+                // Most likely, the search for "end." is a task of the syntax analyzer,
+                // so we can replace it with States.FINISHED.
+                _state = States.ERROR;
+                error_message = "The file is read to the end, but \"end.\" never came up.";
+            }
         }
 
         private void ClearBuffer()
@@ -133,34 +148,33 @@ namespace LexicalAnalyzer
                             {
                                 ClearBuffer();
                                 AddToBuffer(currentChar[0]);
-                                GetNextChar();
                                 _state = States.IS_WORD;
+                                GetNextChar();
                             }
                             else if (char.IsDigit(currentChar[0]))
                             {
                                 tempInt = (int)(currentChar[0] - '0');
                                 AddToBuffer(currentChar[0]);
-                                GetNextChar();
                                 _state = States.IS_CONST;
+                                GetNextChar();
                             }
                             else if (currentChar[0] == '{')
                             {
                                 ClearBuffer();
                                 AddToBuffer(currentChar[0]);
-                                GetNextChar();
                                 _state = States.IS_COMMENT;
+                                GetNextChar();
                             }
                             else if (currentChar[0] == ':')
                             {
                                 ClearBuffer();
                                 AddToBuffer(currentChar[0]);
-                                GetNextChar();
                                 _state = States.IS_ASSIGN;
+                                GetNextChar();
                             }
                             else if (currentChar[0] == '.')
                             {
                                 AddToLexemesList(lexemesList, "End of program", currentChar[0].ToString());
-                                MessageBox.Show("Successfuly!", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 _state = States.FINISHED;
                             }
                             else
@@ -196,13 +210,19 @@ namespace LexicalAnalyzer
                             break;
 
                         // This state looks for constants
-                        // TODO: Implement float recognition
                         case States.IS_CONST:
                             if (char.IsDigit(currentChar[0]))
                             {
                                 tempInt = tempInt * 10 + (int)(currentChar[0] - '0');
                                 AddToBuffer(currentChar[0]);
                                 GetNextChar();
+                            }
+                            else if (char.IsLetter(currentChar[0]))
+                            {
+                                _state = States.ERROR;
+                                error_message = "An invalid character was found: a letter.\n" +
+                                    "No letters are allowed in constants!";
+                                break;
                             }
                             else
                             {
@@ -219,8 +239,8 @@ namespace LexicalAnalyzer
                             {
                                 AddToLexemesList(lexemesList, "Delimiter", currentChar[0].ToString());
                                 ClearBuffer();
-                                GetNextChar();
                                 _state = States.SCANNING;
+                                GetNextChar();
                             }
                             else
                             {
@@ -260,13 +280,13 @@ namespace LexicalAnalyzer
                             }
                             if (!bClosingBlockFound)
                             {
-                                error_message = "The lexical analyzer did not encounter a closing comment symbol";
+                                error_message = "The lexical analyzer did not encounter a closing comment symbol - '}'";
                                 _state = States.ERROR;
                             }
                             
                             AddToLexemesList(lexemesList, "End of comment block", currentChar[0].ToString());
-                            GetNextChar();
                             _state = States.SCANNING;
+                            GetNextChar();
                             break;
 
                         case States.ERROR:
