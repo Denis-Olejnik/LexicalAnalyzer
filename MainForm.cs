@@ -4,14 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
-
-/*
-    varName
-    true false
-    =
-    or xor and not 
-    ( )
- */
 namespace LexicalAnalyzer
 {
     public partial class MainForm : Form
@@ -43,13 +35,6 @@ namespace LexicalAnalyzer
                             textBox_FileViewer.Text = fileContent;
                         }
                         addListLexToDataTableView();
-                        //dataGridView_table.Rows.Clear();
-
-                        //// Transferring data to the method and then analyzing it
-                        //Analyzer lexicAnalyzer = new Analyzer();
-                        //List<Lex> lexicList = lexicAnalyzer.getLexemesList(textBox_FileViewer.Text);
-
-                        //addListLexToDataTableView(lexicList);
                     }
                 }
             }
@@ -72,8 +57,6 @@ namespace LexicalAnalyzer
                 if (File.Exists(textBox_FilePath.Text))
                 {
                     addListLexToDataTableView();
-
-                    //addListLexToDataTableView(lexicList);
                 }
             }
         }
