@@ -1,4 +1,5 @@
 ﻿using LexicalAnalyzer.LexicalAnalyzer.Source;
+using LexicalAnalyzer.Source;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,9 +9,25 @@ namespace LexicalAnalyzer
 {
     public partial class MainForm : Form
     {
+        private const bool DEV_MODE = true;
+        
         public MainForm()
         {
             InitializeComponent();
+
+            if (DEV_MODE)
+            {
+                if (File.Exists(textBox_FilePath.Text))
+                {
+                    using (StreamReader reader = new StreamReader(textBox_FilePath.Text))
+                    {
+                        string fileContent = reader.ReadToEnd();
+                        textBox_FileViewer.Text = fileContent;
+                    }
+
+                    fillTabsContent();
+                }
+            }
         }
 
         private void button_openFile_Click(object sender, EventArgs e)
@@ -34,7 +51,7 @@ namespace LexicalAnalyzer
                             textBox_FilePath.Text = filePath;
                             textBox_FileViewer.Text = fileContent;
                         }
-                        addListLexToDataTableView();
+                        fillTabsContent();
                     }
                 }
             }
@@ -45,7 +62,7 @@ namespace LexicalAnalyzer
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message, "Unexpected exception", MessageBoxButtons.OK);
+                MessageBox.Show(exception.Message, this.Name, MessageBoxButtons.OK);
                 throw;
             }
         }
@@ -54,30 +71,43 @@ namespace LexicalAnalyzer
         {
             if (e.KeyChar == (Int32)(Keys.Enter))
             {
-                if (File.Exists(textBox_FilePath.Text))
+                try
                 {
-                    using (StreamReader reader = new StreamReader(textBox_FilePath.Text))
+                    if (File.Exists(textBox_FilePath.Text))
                     {
-                        string fileContent = reader.ReadToEnd();
-                        textBox_FileViewer.Text = fileContent;
+                        using (StreamReader reader = new StreamReader(textBox_FilePath.Text))
+                        {
+                            string fileContent = reader.ReadToEnd();
+                            textBox_FileViewer.Text = fileContent;
+                        }
+
+                        fillTabsContent();
+                        
                     }
-                    addListLexToDataTableView();
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(exception.Message, this.GetType().Name, MessageBoxButtons.OK);
+                    throw;
                 }
             }
         }
 
-        private void addListLexToDataTableView()
+        private void fillTabsContent()
         {
-            dataGridView_table.Rows.Clear();
+            Lexer lexicalAnalyzer = new Lexer();
+            Parser parser = new Parser();
 
-            // Transferring data to the method and then analyzing it
-            Analyzer lexicAnalyzer = new Analyzer();
-            List<Lex> lexicList = lexicAnalyzer.getLexemesList(textBox_FileViewer.Text);
-
+            // Fill in the table of lexemes
+            dataGridView_table?.Rows.Clear();
+            List<Lex> lexicList = lexicalAnalyzer.getLexemesList(textBox_FileViewer.Text);
             for (int i = 0; i < lexicList.Count; i++)
             {
-                dataGridView_table.Rows.Add(i, lexicList[i].lexemWord, lexicList[i].lexemType);
+                dataGridView_table.Rows.Add(i + 1, lexicList[i].lexemWord, lexicList[i].lexemType);
             }
+
+            // Build a syntax tree
+            parser.GenerateAbstractSyntaxTree(SyntaxTreeView, lexicList);
         }
     }
 }

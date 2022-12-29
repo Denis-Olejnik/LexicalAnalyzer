@@ -19,9 +19,12 @@ namespace LexicalAnalyzer
         {
             {"Condition", new List<string> { "if", "else", } },
             {"Statement", new List<string>{ "true", "false", } },
-            {"Logical", new List<string> {"xor", "or", "and", "not", } },
             {"Service", new List<string> {"program", "var", "begin", "write", "writeln", "for", "to", "do", "random", "randomize", "end"} },
-            {"Variable type", new List<string> {"integer", "boolean", } }
+            {"Variable type", new List<string> {"integer", "boolean", } },
+            {"Binary XOR", new List<string> {"xor"} },
+            {"Logical AND", new List<string> {"and"} },
+            {"Logical NOT", new List<string> {"not"} },
+            {"Logical OR", new List<string> {"or"} },
         };
 
         /// <summary>
@@ -56,8 +59,13 @@ namespace LexicalAnalyzer
         }
     }
 
-    internal class Analyzer
+    internal class Lexer
     {
+        /// <summary>
+        /// Looking for "end." at the end of the program?
+        /// </summary>
+        private bool waitEndOfProgram = false;
+        
         private enum States { SCANNING, IS_WORD, IS_CONST, IS_DELIMITER, IS_ASSIGN, IS_COMMENT, ERROR, FINISHED, };
         private States _state;
         
@@ -96,10 +104,17 @@ namespace LexicalAnalyzer
             // If no new characters are found in the string:
             if (countOfNewSymbols == 0)
             {
-                // Most likely, the search for "end." is a task of the syntax analyzer,
-                // so we can replace it with States.FINISHED.
-                _state = States.ERROR;
-                error_message = "The file is read to the end, but \"end.\" never came up.";
+                if (!waitEndOfProgram)
+                {
+                    _state = States.FINISHED;
+                }
+                else
+                {
+                    // Most likely, the search for "end." is a task of the syntax analyzer,
+                    // so we can replace it with States.FINISHED.
+                    _state = States.ERROR;
+                    error_message = "The file is read to the end, but \"end.\" never came up.";
+                }
             }
         }
 
@@ -144,7 +159,7 @@ namespace LexicalAnalyzer
                             {
                                 GetNextChar();
                             }
-                            else if (char.IsLetter(currentChar[0]))
+                            else if (char.IsLetter(currentChar[0]) || currentChar[0] == '_')
                             {
                                 ClearBuffer();
                                 AddToBuffer(currentChar[0]);
@@ -185,7 +200,7 @@ namespace LexicalAnalyzer
 
                         // This state tries to find a service word equal to the word in the buffer
                         case States.IS_WORD:
-                            if (char.IsLetterOrDigit(currentChar[0]))
+                            if (char.IsLetterOrDigit(currentChar[0]) || currentChar[0] == '_')
                             {
                                 AddToBuffer(currentChar[0]);
                                 GetNextChar();
@@ -219,9 +234,9 @@ namespace LexicalAnalyzer
                             }
                             else if (char.IsLetter(currentChar[0]))
                             {
-                                _state = States.ERROR;
                                 error_message = "An invalid character was found: a letter.\n" +
                                     "No letters are allowed in constants!";
+                                _state = States.ERROR;
                                 break;
                             }
                             else
@@ -244,6 +259,7 @@ namespace LexicalAnalyzer
                             }
                             else
                             {
+                                error_message = $"The \"IS_DELIMITER\" state is active, but the current symbol \"{bufferOfChars}\" is not delimiter!";
                                 _state = States.ERROR;
                             }
                             break;
@@ -290,7 +306,7 @@ namespace LexicalAnalyzer
                             break;
 
                         case States.ERROR:
-                            MessageBox.Show(error_message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(error_message, "State error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             _state = States.FINISHED;
                             break;
 
@@ -301,7 +317,7 @@ namespace LexicalAnalyzer
             }
             catch (Exception _err)
             {
-                MessageBox.Show(_err.Message, "Exception", MessageBoxButtons.OK);
+                MessageBox.Show(_err.Message, "{FSM} Exception", MessageBoxButtons.OK);
                 throw;
             }
 

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage_sourceFile = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -38,21 +38,27 @@
             this.tabPage_LexicalTable = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataGridView_table = new System.Windows.Forms.DataGridView();
+            this.tabPage_SyntaxTree = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.SyntaxTreeView = new System.Windows.Forms.TreeView();
             this.Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1.SuspendLayout();
             this.tabPage_sourceFile.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage_LexicalTable.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_table)).BeginInit();
+            this.tabPage_SyntaxTree.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage_sourceFile);
             this.tabControl1.Controls.Add(this.tabPage_LexicalTable);
+            this.tabControl1.Controls.Add(this.tabPage_SyntaxTree);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -110,6 +116,7 @@
             this.textBox_FilePath.Name = "textBox_FilePath";
             this.textBox_FilePath.Size = new System.Drawing.Size(613, 20);
             this.textBox_FilePath.TabIndex = 0;
+            this.textBox_FilePath.Text = "X:\\Dev\\Projects\\GUMRF\\LexicalAnalyzer\\Tests\\Normal code Simple.txt";
             this.textBox_FilePath.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_FilePath_KeyPress);
             // 
             // tabPage_LexicalTable
@@ -139,19 +146,20 @@
             this.dataGridView_table.AllowUserToDeleteRows = false;
             this.dataGridView_table.AllowUserToResizeColumns = false;
             this.dataGridView_table.AllowUserToResizeRows = false;
+            this.dataGridView_table.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridView_table.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridView_table.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Number,
-            this.Type,
-            this.Value});
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.ControlDark;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView_table.DefaultCellStyle = dataGridViewCellStyle1;
+            this.Value,
+            this.Type});
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView_table.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView_table.Location = new System.Drawing.Point(6, 19);
             this.dataGridView_table.MultiSelect = false;
             this.dataGridView_table.Name = "dataGridView_table";
@@ -163,6 +171,33 @@
             this.dataGridView_table.Size = new System.Drawing.Size(748, 396);
             this.dataGridView_table.TabIndex = 0;
             // 
+            // tabPage_SyntaxTree
+            // 
+            this.tabPage_SyntaxTree.Controls.Add(this.groupBox3);
+            this.tabPage_SyntaxTree.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_SyntaxTree.Name = "tabPage_SyntaxTree";
+            this.tabPage_SyntaxTree.Size = new System.Drawing.Size(777, 434);
+            this.tabPage_SyntaxTree.TabIndex = 2;
+            this.tabPage_SyntaxTree.Text = "Syntax tree";
+            this.tabPage_SyntaxTree.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.SyntaxTreeView);
+            this.groupBox3.Location = new System.Drawing.Point(8, 6);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(760, 421);
+            this.groupBox3.TabIndex = 1;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Syntax tree";
+            // 
+            // SyntaxTreeView
+            // 
+            this.SyntaxTreeView.Location = new System.Drawing.Point(6, 19);
+            this.SyntaxTreeView.Name = "SyntaxTreeView";
+            this.SyntaxTreeView.Size = new System.Drawing.Size(748, 402);
+            this.SyntaxTreeView.TabIndex = 0;
+            // 
             // Number
             // 
             this.Number.HeaderText = "Number";
@@ -171,14 +206,6 @@
             this.Number.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Number.Width = 200;
             // 
-            // Type
-            // 
-            this.Type.HeaderText = "Type";
-            this.Type.Name = "Type";
-            this.Type.ReadOnly = true;
-            this.Type.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Type.Width = 245;
-            // 
             // Value
             // 
             this.Value.HeaderText = "Value";
@@ -186,6 +213,14 @@
             this.Value.ReadOnly = true;
             this.Value.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Value.Width = 300;
+            // 
+            // Type
+            // 
+            this.Type.HeaderText = "Type";
+            this.Type.Name = "Type";
+            this.Type.ReadOnly = true;
+            this.Type.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Type.Width = 245;
             // 
             // MainForm
             // 
@@ -204,6 +239,8 @@
             this.tabPage_LexicalTable.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_table)).EndInit();
+            this.tabPage_SyntaxTree.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -219,8 +256,11 @@
         private System.Windows.Forms.TextBox textBox_FileViewer;
         private System.Windows.Forms.DataGridView dataGridView_table;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.TabPage tabPage_SyntaxTree;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.TreeView SyntaxTreeView;
         private System.Windows.Forms.DataGridViewTextBoxColumn Number;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Type;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Type;
     }
 }

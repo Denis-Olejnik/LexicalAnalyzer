@@ -1,12 +1,21 @@
 program bool;
 	var x, y: boolean;
 begin
+	{a1 := true;
+	b1 := false;
+	c1 := false;}
+
 	x := true;
 	y := false;
-	y := false1;
+	z := false;
+	z1 := true;
 	
+	y := x or true and false xor y not z not y;
+	
+	{ Пример плохого кода }
+	{y := xor z andd trues not x or y or z1;}
+
 	if x = true then
 		writeln(x);
 		
 end.
-		

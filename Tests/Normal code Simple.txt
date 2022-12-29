@@ -1,0 +1,4 @@
+value_1 := true;
+value_2 := false;
+
+value_3 := false or (not true);
