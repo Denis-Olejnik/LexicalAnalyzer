@@ -18,7 +18,7 @@ namespace LexicalAnalyzer
 
             if (DEV_MODE)
             {
-                //textBox_FilePath.Text = "";
+                textBox_FilePath.Text = "X:\\Dev\\Projects\\GUMRF\\LexicalAnalyzer\\Tests\\Normal code Simple.txt";
                 if (File.Exists(textBox_FilePath.Text))
                 {
                     using (StreamReader reader = new StreamReader(textBox_FilePath.Text))

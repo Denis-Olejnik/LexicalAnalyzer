@@ -53,37 +53,51 @@ namespace LexicalAnalyzer.Source
 
         private void AddChildNodes(TreeView treeView, List<Lex> lexesList, int currentLexIndex)
         {
-            // Array offset used to get the relative index of the elements
-            int localOffset = currentLexIndex - lexemBlockStartIndex;
+            try
+            {
+                // Array offset used to get the relative index of the elements
+                int localOffset = currentLexIndex - lexemBlockStartIndex;
 
-            // TODO: Use recursion to add nested blocks
-            // TODO: if (Rule_IsVariable(lexesList, currentLexIndex) { ... }
-            if (lexesList[currentLexIndex].lexemType == "Assign")
-            {
-                lexemBlockTemporary.Nodes.Add(":=");
-            }
-            else if (lexesList[currentLexIndex].lexemType == "Variable")
-            {
-                lexemBlockTemporary.Nodes.Add("Variable");
-                lexemBlockTemporary.Nodes[localOffset].Nodes.Add(lexesList[currentLexIndex].lexemWord);
-            }
-            else if (lexesList[currentLexIndex].lexemWord == ";")
-            {
-                lexemBlockTemporary.Nodes.Add(";");
-            }
-            else if (lexesList[currentLexIndex].lexemType == "Statement")
-            {
-                lexemBlockTemporary.Nodes.Add("Condition");
-                lexemBlockTemporary.Nodes[localOffset].Nodes.Add(lexesList[currentLexIndex].lexemWord);
-            }
-            else if (lexesList[currentLexIndex].lexemType == "")
-            {
+                // TODO: Use recursion to add nested blocks
+                // TODO: if (Rule_IsVariable(lexesList, currentLexIndex) { ... }
+                if (lexesList[currentLexIndex].lexemType == "Assign")
+                {
+                    lexemBlockTemporary.Nodes.Add(":=");
+                }
+                else if (lexesList[currentLexIndex].lexemType == "Variable")
+                {
+                    lexemBlockTemporary.Nodes.Add("Variable");
+                    lexemBlockTemporary.Nodes[localOffset].Nodes.Add(lexesList[currentLexIndex].lexemWord);
+                }
+                else if (lexesList[currentLexIndex].lexemWord == ";")
+                {
+                    lexemBlockTemporary.Nodes.Add(";");
+                }
+                else if (lexesList[currentLexIndex].lexemType == "Statement")
+                {
+                    lexemBlockTemporary.Nodes.Add("Condition");
+                    lexemBlockTemporary.Nodes[localOffset].Nodes.Add(lexesList[currentLexIndex].lexemWord);
+                }
+                else if (lexesList[currentLexIndex].lexemType == "")
+                {
 
+                }
+                else
+                {
+                    //AddChildNodes(treeView, lexesList, currentLexIndex);
+                    lexemBlockTemporary.Nodes.Add("Other");
+                }
             }
-            else
+            catch (StackOverflowException stackOverException)
             {
-                lexemBlockTemporary.Nodes.Add("Other");
+                MessageBox.Show(stackOverException.Message, this.GetType().Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
             }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message, this.GetType().Name, MessageBoxButtons.OK);
+            }
+
         }
     }
 }
