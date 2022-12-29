@@ -10,13 +10,15 @@ namespace LexicalAnalyzer
     public partial class MainForm : Form
     {
         private const bool DEV_MODE = true;
-        
+        private bool syntaxTreeIsExpanded = false;
+
         public MainForm()
         {
             InitializeComponent();
 
             if (DEV_MODE)
             {
+                //textBox_FilePath.Text = "";
                 if (File.Exists(textBox_FilePath.Text))
                 {
                     using (StreamReader reader = new StreamReader(textBox_FilePath.Text))
@@ -62,8 +64,39 @@ namespace LexicalAnalyzer
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message, this.Name, MessageBoxButtons.OK);
-                throw;
+                MessageBox.Show(exception.Message, this.GetType().Name, MessageBoxButtons.OK);
+            }
+        }
+
+        private void button_ToggleTreeViewVIsib_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (syntaxTreeIsExpanded)
+                {
+                    SyntaxTreeView?.CollapseAll();
+                }
+                else
+                {
+                    SyntaxTreeView?.ExpandAll();
+                }
+                syntaxTreeIsExpanded = !syntaxTreeIsExpanded;
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message, this.GetType().Name, MessageBoxButtons.OK);
+            }
+        }
+
+        private void button_ShowDeepestTreeView_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                throw new NotImplementedException("This feature is not implemented yet!");
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message, this.GetType().Name, MessageBoxButtons.OK);
             }
         }
 
@@ -80,9 +113,7 @@ namespace LexicalAnalyzer
                             string fileContent = reader.ReadToEnd();
                             textBox_FileViewer.Text = fileContent;
                         }
-
                         fillTabsContent();
-                        
                     }
                 }
                 catch (Exception exception)
@@ -109,5 +140,7 @@ namespace LexicalAnalyzer
             // Build a syntax tree
             parser.GenerateAbstractSyntaxTree(SyntaxTreeView, lexicList);
         }
+
+
     }
 }

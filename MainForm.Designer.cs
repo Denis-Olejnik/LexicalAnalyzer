@@ -30,7 +30,7 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage_sourceFile = new System.Windows.Forms.TabPage();
+            this.tabPage_SourceFile = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBox_FileViewer = new System.Windows.Forms.TextBox();
             this.button_openFile = new System.Windows.Forms.Button();
@@ -38,43 +38,51 @@
             this.tabPage_LexicalTable = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataGridView_table = new System.Windows.Forms.DataGridView();
-            this.tabPage_SyntaxTree = new System.Windows.Forms.TabPage();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.SyntaxTreeView = new System.Windows.Forms.TreeView();
             this.Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabPage_SyntaxTree = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button_ToggleTreeViewVisib = new System.Windows.Forms.Button();
+            this.SyntaxTreeView = new System.Windows.Forms.TreeView();
+            this.tabPage_CodeGeneration = new System.Windows.Forms.TabPage();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.button_ShowDeepestTreeView = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
-            this.tabPage_sourceFile.SuspendLayout();
+            this.tabPage_SourceFile.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage_LexicalTable.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_table)).BeginInit();
             this.tabPage_SyntaxTree.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.tabPage_CodeGeneration.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage_sourceFile);
+            this.tabControl1.Controls.Add(this.tabPage_SourceFile);
             this.tabControl1.Controls.Add(this.tabPage_LexicalTable);
             this.tabControl1.Controls.Add(this.tabPage_SyntaxTree);
+            this.tabControl1.Controls.Add(this.tabPage_CodeGeneration);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(785, 460);
             this.tabControl1.TabIndex = 0;
             // 
-            // tabPage_sourceFile
+            // tabPage_SourceFile
             // 
-            this.tabPage_sourceFile.BackColor = System.Drawing.Color.Transparent;
-            this.tabPage_sourceFile.Controls.Add(this.groupBox1);
-            this.tabPage_sourceFile.Location = new System.Drawing.Point(4, 22);
-            this.tabPage_sourceFile.Name = "tabPage_sourceFile";
-            this.tabPage_sourceFile.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_sourceFile.Size = new System.Drawing.Size(777, 434);
-            this.tabPage_sourceFile.TabIndex = 0;
-            this.tabPage_sourceFile.Text = "Source file";
+            this.tabPage_SourceFile.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage_SourceFile.Controls.Add(this.groupBox1);
+            this.tabPage_SourceFile.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_SourceFile.Name = "tabPage_SourceFile";
+            this.tabPage_SourceFile.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_SourceFile.Size = new System.Drawing.Size(777, 434);
+            this.tabPage_SourceFile.TabIndex = 0;
+            this.tabPage_SourceFile.Text = "Source file";
             // 
             // groupBox1
             // 
@@ -171,33 +179,6 @@
             this.dataGridView_table.Size = new System.Drawing.Size(748, 396);
             this.dataGridView_table.TabIndex = 0;
             // 
-            // tabPage_SyntaxTree
-            // 
-            this.tabPage_SyntaxTree.Controls.Add(this.groupBox3);
-            this.tabPage_SyntaxTree.Location = new System.Drawing.Point(4, 22);
-            this.tabPage_SyntaxTree.Name = "tabPage_SyntaxTree";
-            this.tabPage_SyntaxTree.Size = new System.Drawing.Size(777, 434);
-            this.tabPage_SyntaxTree.TabIndex = 2;
-            this.tabPage_SyntaxTree.Text = "Syntax tree";
-            this.tabPage_SyntaxTree.UseVisualStyleBackColor = true;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.SyntaxTreeView);
-            this.groupBox3.Location = new System.Drawing.Point(8, 6);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(760, 421);
-            this.groupBox3.TabIndex = 1;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Syntax tree";
-            // 
-            // SyntaxTreeView
-            // 
-            this.SyntaxTreeView.Location = new System.Drawing.Point(6, 19);
-            this.SyntaxTreeView.Name = "SyntaxTreeView";
-            this.SyntaxTreeView.Size = new System.Drawing.Size(748, 402);
-            this.SyntaxTreeView.TabIndex = 0;
-            // 
             // Number
             // 
             this.Number.HeaderText = "Number";
@@ -222,6 +203,84 @@
             this.Type.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Type.Width = 245;
             // 
+            // tabPage_SyntaxTree
+            // 
+            this.tabPage_SyntaxTree.Controls.Add(this.groupBox3);
+            this.tabPage_SyntaxTree.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_SyntaxTree.Name = "tabPage_SyntaxTree";
+            this.tabPage_SyntaxTree.Size = new System.Drawing.Size(777, 434);
+            this.tabPage_SyntaxTree.TabIndex = 2;
+            this.tabPage_SyntaxTree.Text = "Syntax tree";
+            this.tabPage_SyntaxTree.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.button_ShowDeepestTreeView);
+            this.groupBox3.Controls.Add(this.button_ToggleTreeViewVisib);
+            this.groupBox3.Controls.Add(this.SyntaxTreeView);
+            this.groupBox3.Location = new System.Drawing.Point(8, 6);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(760, 421);
+            this.groupBox3.TabIndex = 1;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Syntax tree";
+            // 
+            // button_ToggleTreeViewVisib
+            // 
+            this.button_ToggleTreeViewVisib.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.button_ToggleTreeViewVisib.Location = new System.Drawing.Point(625, 18);
+            this.button_ToggleTreeViewVisib.Name = "button_ToggleTreeViewVisib";
+            this.button_ToggleTreeViewVisib.Size = new System.Drawing.Size(129, 22);
+            this.button_ToggleTreeViewVisib.TabIndex = 2;
+            this.button_ToggleTreeViewVisib.Text = "Toggle Visibility";
+            this.button_ToggleTreeViewVisib.UseVisualStyleBackColor = true;
+            this.button_ToggleTreeViewVisib.Click += new System.EventHandler(this.button_ToggleTreeViewVIsib_Click);
+            // 
+            // SyntaxTreeView
+            // 
+            this.SyntaxTreeView.Location = new System.Drawing.Point(6, 46);
+            this.SyntaxTreeView.Name = "SyntaxTreeView";
+            this.SyntaxTreeView.Size = new System.Drawing.Size(748, 369);
+            this.SyntaxTreeView.TabIndex = 0;
+            // 
+            // tabPage_CodeGeneration
+            // 
+            this.tabPage_CodeGeneration.Controls.Add(this.groupBox4);
+            this.tabPage_CodeGeneration.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_CodeGeneration.Name = "tabPage_CodeGeneration";
+            this.tabPage_CodeGeneration.Size = new System.Drawing.Size(777, 434);
+            this.tabPage_CodeGeneration.TabIndex = 3;
+            this.tabPage_CodeGeneration.Text = "Code generation";
+            this.tabPage_CodeGeneration.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.treeView1);
+            this.groupBox4.Location = new System.Drawing.Point(8, 6);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(760, 421);
+            this.groupBox4.TabIndex = 2;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Syntax tree";
+            // 
+            // treeView1
+            // 
+            this.treeView1.Location = new System.Drawing.Point(6, 46);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(748, 369);
+            this.treeView1.TabIndex = 0;
+            // 
+            // button_ShowDeepestTreeView
+            // 
+            this.button_ShowDeepestTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.button_ShowDeepestTreeView.Location = new System.Drawing.Point(484, 18);
+            this.button_ShowDeepestTreeView.Name = "button_ShowDeepestTreeView";
+            this.button_ShowDeepestTreeView.Size = new System.Drawing.Size(129, 22);
+            this.button_ShowDeepestTreeView.TabIndex = 3;
+            this.button_ShowDeepestTreeView.Text = "Show deepest path";
+            this.button_ShowDeepestTreeView.UseVisualStyleBackColor = true;
+            this.button_ShowDeepestTreeView.Click += new System.EventHandler(this.button_ShowDeepestTreeView_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -233,7 +292,7 @@
             this.Name = "MainForm";
             this.Text = "Lexical analyzer";
             this.tabControl1.ResumeLayout(false);
-            this.tabPage_sourceFile.ResumeLayout(false);
+            this.tabPage_SourceFile.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabPage_LexicalTable.ResumeLayout(false);
@@ -241,6 +300,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_table)).EndInit();
             this.tabPage_SyntaxTree.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
+            this.tabPage_CodeGeneration.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -248,7 +309,7 @@
         #endregion
 
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage_sourceFile;
+        private System.Windows.Forms.TabPage tabPage_SourceFile;
         private System.Windows.Forms.TabPage tabPage_LexicalTable;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button button_openFile;
@@ -262,5 +323,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Number;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
         private System.Windows.Forms.DataGridViewTextBoxColumn Type;
+        private System.Windows.Forms.TabPage tabPage_CodeGeneration;
+        private System.Windows.Forms.Button button_ToggleTreeViewVisib;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.Button button_ShowDeepestTreeView;
     }
 }
