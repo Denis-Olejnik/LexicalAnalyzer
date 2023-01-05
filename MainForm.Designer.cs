@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage_SourceFile = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -43,14 +43,15 @@
             this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage_SyntaxTree = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button_RegenerateTreeView = new System.Windows.Forms.Button();
+            this.button_ShowDeepestTreeView = new System.Windows.Forms.Button();
             this.button_ToggleTreeViewVisib = new System.Windows.Forms.Button();
             this.SyntaxTreeView = new System.Windows.Forms.TreeView();
             this.tabPage_CodeGeneration = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.treeView1 = new System.Windows.Forms.TreeView();
-            this.button_ShowDeepestTreeView = new System.Windows.Forms.Button();
             this.button_SimpleButton = new System.Windows.Forms.Button();
             this.button_AnotherButton = new System.Windows.Forms.Button();
+            this.treeView1 = new System.Windows.Forms.TreeView();
             this.tabControl1.SuspendLayout();
             this.tabPage_SourceFile.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -161,14 +162,14 @@
             this.Number,
             this.Value,
             this.Type});
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.ActiveCaption;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView_table.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView_table.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView_table.Location = new System.Drawing.Point(6, 19);
             this.dataGridView_table.MultiSelect = false;
             this.dataGridView_table.Name = "dataGridView_table";
@@ -216,6 +217,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.button_RegenerateTreeView);
             this.groupBox3.Controls.Add(this.button_ShowDeepestTreeView);
             this.groupBox3.Controls.Add(this.button_ToggleTreeViewVisib);
             this.groupBox3.Controls.Add(this.SyntaxTreeView);
@@ -226,6 +228,28 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Syntax tree";
             // 
+            // button_RegenerateTreeView
+            // 
+            this.button_RegenerateTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.button_RegenerateTreeView.Location = new System.Drawing.Point(343, 18);
+            this.button_RegenerateTreeView.Name = "button_RegenerateTreeView";
+            this.button_RegenerateTreeView.Size = new System.Drawing.Size(129, 22);
+            this.button_RegenerateTreeView.TabIndex = 4;
+            this.button_RegenerateTreeView.Text = "Regenerate tree";
+            this.button_RegenerateTreeView.UseVisualStyleBackColor = true;
+            this.button_RegenerateTreeView.Click += new System.EventHandler(this.button_RegenerateTreeView_Click);
+            // 
+            // button_ShowDeepestTreeView
+            // 
+            this.button_ShowDeepestTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            this.button_ShowDeepestTreeView.Location = new System.Drawing.Point(484, 18);
+            this.button_ShowDeepestTreeView.Name = "button_ShowDeepestTreeView";
+            this.button_ShowDeepestTreeView.Size = new System.Drawing.Size(129, 22);
+            this.button_ShowDeepestTreeView.TabIndex = 3;
+            this.button_ShowDeepestTreeView.Text = "Show deepest path";
+            this.button_ShowDeepestTreeView.UseVisualStyleBackColor = true;
+            this.button_ShowDeepestTreeView.Click += new System.EventHandler(this.button_ShowDeepestTreeView_Click);
+            // 
             // button_ToggleTreeViewVisib
             // 
             this.button_ToggleTreeViewVisib.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
@@ -235,10 +259,11 @@
             this.button_ToggleTreeViewVisib.TabIndex = 2;
             this.button_ToggleTreeViewVisib.Text = "Toggle Visibility";
             this.button_ToggleTreeViewVisib.UseVisualStyleBackColor = true;
-            this.button_ToggleTreeViewVisib.Click += new System.EventHandler(this.button_ToggleTreeViewVIsib_Click);
+            this.button_ToggleTreeViewVisib.Click += new System.EventHandler(this.button_ToggleTreeViewVisib_Click);
             // 
             // SyntaxTreeView
             // 
+            this.SyntaxTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SyntaxTreeView.Location = new System.Drawing.Point(6, 46);
             this.SyntaxTreeView.Name = "SyntaxTreeView";
             this.SyntaxTreeView.Size = new System.Drawing.Size(748, 369);
@@ -266,24 +291,6 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Code generation";
             // 
-            // treeView1
-            // 
-            this.treeView1.Location = new System.Drawing.Point(6, 46);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(748, 369);
-            this.treeView1.TabIndex = 0;
-            // 
-            // button_ShowDeepestTreeView
-            // 
-            this.button_ShowDeepestTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
-            this.button_ShowDeepestTreeView.Location = new System.Drawing.Point(484, 18);
-            this.button_ShowDeepestTreeView.Name = "button_ShowDeepestTreeView";
-            this.button_ShowDeepestTreeView.Size = new System.Drawing.Size(129, 22);
-            this.button_ShowDeepestTreeView.TabIndex = 3;
-            this.button_ShowDeepestTreeView.Text = "Show deepest path";
-            this.button_ShowDeepestTreeView.UseVisualStyleBackColor = true;
-            this.button_ShowDeepestTreeView.Click += new System.EventHandler(this.button_ShowDeepestTreeView_Click);
-            // 
             // button_SimpleButton
             // 
             this.button_SimpleButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
@@ -303,6 +310,13 @@
             this.button_AnotherButton.TabIndex = 4;
             this.button_AnotherButton.Text = "Another Button";
             this.button_AnotherButton.UseVisualStyleBackColor = true;
+            // 
+            // treeView1
+            // 
+            this.treeView1.Location = new System.Drawing.Point(6, 46);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(748, 369);
+            this.treeView1.TabIndex = 0;
             // 
             // MainForm
             // 
@@ -353,5 +367,6 @@
         private System.Windows.Forms.Button button_ShowDeepestTreeView;
         private System.Windows.Forms.Button button_SimpleButton;
         private System.Windows.Forms.Button button_AnotherButton;
+        private System.Windows.Forms.Button button_RegenerateTreeView;
     }
 }

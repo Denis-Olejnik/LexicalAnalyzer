@@ -7,41 +7,37 @@ namespace LexicalAnalyzer.Source
 {
     class Parser
     {
-        private ParserRules rules = new ParserRules();
-        private TreeNode lexemBlockRootNode = null;
-        private TreeNode lexemBlockTemporary = null;
-        private int lexemBlockStartIndex = 0;
-        private int countExprBlocks = 0;
+        private readonly ParserRules rules = new ParserRules();
 
-        public void GenerateAbstractSyntaxTree(TreeView treeView, List<Lex> lexesList)
+        public void GenerateAbstractSyntaxTree(TreeView treeView, List<Lex> lexes)
         {
             try
             {
-                // Just in case, clean up and create a root node of type "E"
                 treeView.Nodes.Clear();
-                treeView.Nodes.Add("Root");
-                lexemBlockRootNode = treeView.Nodes[0];
+                treeView.Nodes.Add("E");
+
+                TreeNode rootTreeNode = treeView.Nodes[0];
+                TreeNode blockTreeNode = null;
+                int blockExprIndex = 0;
+                int blockBeginIndex = 0;
 
                 // Iterate through the list of lexemes, looking at each
-                for (int lexemBlockEndIndex = lexemBlockStartIndex; lexemBlockEndIndex < lexesList.Count; lexemBlockEndIndex++)
+                for (int blockEndIndex = blockBeginIndex; blockEndIndex < lexes.Count; blockEndIndex++)
                 {
                     // If a syntactically correct string ending with a semicolon is found 
-                    if (rules.Rule_EndsOnSemicolon(lexesList[lexemBlockEndIndex].lexemWord))
+                    if (lexes[blockEndIndex].type == Lex.Type.Semicolon)
                     {
-                        lexemBlockRootNode.Nodes.Add($"RootBlock {lexemBlockStartIndex} - {lexemBlockEndIndex}");
+                        rootTreeNode.Nodes.Add("E");
 
                         // The root block of the expression is temporarily stored here
-                        lexemBlockTemporary = lexemBlockRootNode.Nodes[countExprBlocks];
+                        blockTreeNode = rootTreeNode.Nodes[blockExprIndex];
 
-                        // Pass from the beginning of the block to the end (lexemBlockEndIndex -> ';')
-                        for (int localSearchIndex = lexemBlockStartIndex; localSearchIndex <= lexemBlockEndIndex; localSearchIndex++)
-                        {
-                            AddChildNodes(treeView, lexesList, localSearchIndex);
-                        }
-                        lexemBlockStartIndex = lexemBlockEndIndex + 1;
+                        GenerateTreeNodes(blockTreeNode, lexes, blockBeginIndex, blockEndIndex);
+                        blockTreeNode.Nodes.Add(";");
+                        blockBeginIndex = blockEndIndex + 1;
 
                         // Move to the next root block of the expression 
-                        countExprBlocks++;
+                        blockExprIndex++;
                     }
                 }
             }
@@ -51,53 +47,74 @@ namespace LexicalAnalyzer.Source
             }
         }
 
-        private void AddChildNodes(TreeView treeView, List<Lex> lexesList, int currentLexIndex)
+        private void GenerateTreeNodes(TreeNode root, List<Lex> lexes, int _begin, int _end)
         {
-            try
+            for (int i = _begin; i <= _end; i++)
             {
-                // Array offset used to get the relative index of the elements
-                int localOffset = currentLexIndex - lexemBlockStartIndex;
+                // Terminal types (true, not, variable, symbols, etc)
+                if (lexes[i].type == Lex.Type.Variable) AddChildNode(root, lexes[i].word);
+                else if (lexes[i].type == Lex.Type.Condition) AddChildNode(root, lexes[i].word);
+                else if (isLogicalType(lexes[i].type)) root.Nodes.Add(lexes[i].word);
 
-                // TODO: Use recursion to add nested blocks
-                // TODO: if (Rule_IsVariable(lexesList, currentLexIndex) { ... }
-                if (lexesList[currentLexIndex].lexemType == "Assign")
+                // Can be a nested expressions
+                else if (lexes[i].word == "(")
                 {
-                    lexemBlockTemporary.Nodes.Add(":=");
-                }
-                else if (lexesList[currentLexIndex].lexemType == "Variable")
-                {
-                    lexemBlockTemporary.Nodes.Add("Variable");
-                    lexemBlockTemporary.Nodes[localOffset].Nodes.Add(lexesList[currentLexIndex].lexemWord);
-                }
-                else if (lexesList[currentLexIndex].lexemWord == ";")
-                {
-                    lexemBlockTemporary.Nodes.Add(";");
-                }
-                else if (lexesList[currentLexIndex].lexemType == "Statement")
-                {
-                    lexemBlockTemporary.Nodes.Add("Condition");
-                    lexemBlockTemporary.Nodes[localOffset].Nodes.Add(lexesList[currentLexIndex].lexemWord);
-                }
-                else if (lexesList[currentLexIndex].lexemType == "")
-                {
+                    TreeNode parenthesisExp = root.Nodes.Add("E");
+                    parenthesisExp.Nodes.Add("(");
 
+                    TreeNode temporary = parenthesisExp.Nodes.Add("E");
+                    int parenthesisEnd = i;
+
+                    for (; parenthesisEnd < _end; parenthesisEnd++)
+                    {
+                        if (lexes[parenthesisEnd].word == ")")
+                        {
+                            GenerateTreeNodes(temporary, lexes, i + 1, parenthesisEnd);
+                        }
+                    }
+                    i = parenthesisEnd;
+                    parenthesisExp.Nodes.Add(")");
                 }
-                else
+
+                // It can be either a nested expression or a terminal type
+                else if (lexes[i].type == Lex.Type.Assign)
                 {
-                    //AddChildNodes(treeView, lexesList, currentLexIndex);
-                    lexemBlockTemporary.Nodes.Add("Other");
+                    root.Nodes.Add(":=");
+
+                    // If there are more than 2 tokens left in the string (a difficult expression is found)
+                    if (_end - i > 2)
+                    {
+                        TreeNode expression = root.Nodes.Add("E");
+                        GenerateTreeNodes(expression, lexes, i + 1, _end);
+                        return;
+                    }
                 }
             }
-            catch (StackOverflowException stackOverException)
-            {
-                MessageBox.Show(stackOverException.Message, this.GetType().Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                throw;
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message, this.GetType().Name, MessageBoxButtons.OK);
-            }
+        }
 
+
+        /// <summary>
+        /// Adds a child node with the specified name
+        /// </summary>
+        /// <param name="parent">The parent node to which to add a new node</param>
+        /// <param name="name">Name of added node</param>
+        private void AddChildNode(TreeNode parent, string name)
+        {
+            TreeNode temporary = parent.Nodes.Add("E");
+            temporary.Nodes.Add(name);
+        }
+
+        private bool isLogicalType(Lex.Type type)
+        {
+            if (type == Lex.Type.Logical_AND || type == Lex.Type.Logical_XOR || 
+                type == Lex.Type.Logical_OR || type == Lex.Type.Logical_NOT)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

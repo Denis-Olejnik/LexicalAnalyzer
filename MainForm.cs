@@ -1,6 +1,7 @@
 ﻿using LexicalAnalyzer.LexicalAnalyzer.Source;
 using LexicalAnalyzer.Source;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
@@ -11,6 +12,8 @@ namespace LexicalAnalyzer
     {
         private const bool DEV_MODE = true;
         private bool syntaxTreeIsExpanded = false;
+        
+        private ArrayList list = new ArrayList();
 
         public MainForm()
         {
@@ -68,7 +71,7 @@ namespace LexicalAnalyzer
             }
         }
 
-        private void button_ToggleTreeViewVIsib_Click(object sender, EventArgs e)
+        private void button_ToggleTreeViewVisib_Click(object sender, EventArgs e)
         {
             try
             {
@@ -92,11 +95,21 @@ namespace LexicalAnalyzer
         {
             try
             {
-                throw new NotImplementedException("This feature is not implemented yet!");
+                GetDeeperLevel(SyntaxTreeView?.Nodes[0]);
+                list.Sort();
             }
             catch (Exception exception)
             {
                 MessageBox.Show(exception.Message, this.GetType().Name, MessageBoxButtons.OK);
+            }
+        }
+
+        private void GetDeeperLevel(TreeNode node)
+        {
+            for (int i = 0; i < node.Nodes.Count; i++)
+            {
+                GetDeeperLevel(node.Nodes[i]);
+                list.Add(node.Nodes[i].Level);
             }
         }
 
@@ -132,15 +145,31 @@ namespace LexicalAnalyzer
             // Fill in the table of lexemes
             dataGridView_table?.Rows.Clear();
             List<Lex> lexicList = lexicalAnalyzer.getLexemesList(textBox_FileViewer.Text);
+            
             for (int i = 0; i < lexicList.Count; i++)
             {
-                dataGridView_table.Rows.Add(i + 1, lexicList[i].lexemWord, lexicList[i].lexemType);
+                dataGridView_table.Rows.Add(i + 1, lexicList[i].word, lexicList[i].type);
             }
 
             // Build a syntax tree
             parser.GenerateAbstractSyntaxTree(SyntaxTreeView, lexicList);
         }
 
+        private void button_RegenerateTreeView_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(textBox_FilePath.Text))
+            {
+                using (StreamReader reader = new StreamReader(textBox_FilePath.Text))
+                {
+                    string fileContent = reader.ReadToEnd();
+                    textBox_FileViewer.Text = fileContent;
+                }
 
+                fillTabsContent();
+                SyntaxTreeView?.ExpandAll();
+                syntaxTreeIsExpanded = true;
+            }
+            
+        }
     }
 }

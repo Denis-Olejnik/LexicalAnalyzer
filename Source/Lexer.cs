@@ -15,16 +15,21 @@ namespace LexicalAnalyzer
         /// This dictionary contains a list of all service words.
         /// For example: "Condition" : "true", "false"
         /// </summary>
-        public readonly Dictionary<string, List<string>> serviceWords = new Dictionary<string, List<string>>()
+        public readonly Dictionary<Lex.Type, List<string>> serviceWords = new Dictionary<Lex.Type, List<string>>()
         {
-            {"Condition", new List<string> { "if", "else", } },
-            {"Statement", new List<string>{ "true", "false", } },
-            {"Service", new List<string> {"program", "var", "begin", "write", "writeln", "for", "to", "do", "random", "randomize", "end"} },
-            {"Variable type", new List<string> {"integer", "boolean", } },
-            {"Binary XOR", new List<string> {"xor"} },
-            {"Logical AND", new List<string> {"and"} },
-            {"Logical NOT", new List<string> {"not"} },
-            {"Logical OR", new List<string> {"or"} },
+            {Lex.Type.Condition, new List<string>{ "true", "false", } },
+            {Lex.Type.Logical_XOR, new List<string> {"xor"} },
+            {Lex.Type.Logical_AND, new List<string> {"and"} },
+            {Lex.Type.Logical_NOT, new List<string> {"not"} },
+            {Lex.Type.Logical_OR, new List<string> {"or"} },
+        };
+
+        public readonly Dictionary<Lex.Type, List<string>> serviceDelimiters = new Dictionary<Lex.Type, List<string>>()
+        {
+            {Lex.Type.Semicolon, new List<string>{";"} },
+            {Lex.Type.Colon, new List<string>{":"} },
+            {Lex.Type.End, new List<string>{"."} },
+            {Lex.Type.Parenthesis, new List<string>{")","("} }
         };
 
         /// <summary>
@@ -33,12 +38,12 @@ namespace LexicalAnalyzer
         /// <param name="word">The word to be found</param>
         /// <returns>Returns the name of the category in which the passed word was found. 
         /// If no word is found, it returns null.</returns>
-        public string FindServiceWordCategory(string word)
+        public Lex.Type FindServiceCategory(string word, Dictionary<Lex.Type, List<string>> serviceDict)
         {
             // Read every key and get his values
-            foreach (KeyValuePair<string, List<string>> keyValuePair in serviceWords)
+            foreach (KeyValuePair<Lex.Type, List<string>> keyValuePair in serviceDict)
             {
-                string key = keyValuePair.Key;
+                Lex.Type key = keyValuePair.Key;
                 List<string> values = keyValuePair.Value;
 
                 foreach (var serviceWord in values)
@@ -46,17 +51,9 @@ namespace LexicalAnalyzer
                     if (serviceWord == word) return key;
                 }
             }
-            return null;
+            return Lex.Type.Null;
         }
 
-        public bool isDelimiter(string symbol)
-        {
-            List<string> delimiters = new List<string>()
-            {
-                ".", ";", ",", "(", ")", "+", "-", "*", "/", "=", ">", "<",
-            };
-            return delimiters.Contains(symbol);
-        }
     }
 
     internal class Lexer
@@ -68,8 +65,8 @@ namespace LexicalAnalyzer
         
         private enum States { SCANNING, IS_WORD, IS_CONST, IS_DELIMITER, IS_ASSIGN, IS_COMMENT, ERROR, FINISHED, };
         private States _state;
-        
-        private ServiceWordsDictionary _serviceWordsDict = new ServiceWordsDictionary();
+
+        private ServiceWordsDictionary _serviceDict = new ServiceWordsDictionary();
         public readonly List<Lex> lexemesList = new List<Lex>();
 
         // File reader: 
@@ -132,9 +129,9 @@ namespace LexicalAnalyzer
             bufferOfChars += symbol;
         }
 
-        private void AddToLexemesList(List<Lex> _lexemesList, string wordType, string wordBuffer)
+        private void AddToLexemesList(List<Lex> _lexemesList, Lex.Type lexType, string wordBuffer)
         {
-            _lexemesList.Add(new Lex(wordType, wordBuffer));
+            _lexemesList.Add(new Lex(lexType, wordBuffer));
         }
 
         public List<Lex> getLexemesList(string text)
@@ -189,7 +186,7 @@ namespace LexicalAnalyzer
                             }
                             else if (currentChar[0] == '.')
                             {
-                                AddToLexemesList(lexemesList, "End of program", currentChar[0].ToString());
+                                AddToLexemesList(lexemesList, Lex.Type.End, currentChar[0].ToString());
                                 _state = States.FINISHED;
                             }
                             else
@@ -207,17 +204,17 @@ namespace LexicalAnalyzer
                             }
                             else
                             {
-                                string serviceWordType = _serviceWordsDict.FindServiceWordCategory(bufferOfChars);
+                                Lex.Type serviceWordType = _serviceDict.FindServiceCategory(bufferOfChars, _serviceDict.serviceWords);
 
                                 // Found service word from the dictionary
-                                if (serviceWordType != null)
+                                if (serviceWordType != Lex.Type.Null)
                                 {
                                     AddToLexemesList(lexemesList, serviceWordType, bufferOfChars);
                                 }
-                                // If the word is not found in the dictionary, write it as "Variable"
                                 else
                                 {
-                                    AddToLexemesList(lexemesList, "Variable", bufferOfChars);
+                                    //If the word is not found in the dictionary, write it as "Variable"
+                                    AddToLexemesList(lexemesList, Lex.Type.Variable, bufferOfChars);
                                 }
                                 ClearBuffer();
                                 _state = States.SCANNING;
@@ -241,7 +238,7 @@ namespace LexicalAnalyzer
                             }
                             else
                             {
-                                AddToLexemesList(lexemesList, "Constant", bufferOfChars);
+                                AddToLexemesList(lexemesList, Lex.Type.Constant, bufferOfChars);
                                 ClearBuffer();
                                 _state = States.SCANNING;
                             }
@@ -250,9 +247,13 @@ namespace LexicalAnalyzer
                         case States.IS_DELIMITER:
                             ClearBuffer();
                             AddToBuffer(currentChar[0]);
-                            if (_serviceWordsDict.isDelimiter(bufferOfChars))
+
+                            Lex.Type serviceDelimiters = _serviceDict.FindServiceCategory(bufferOfChars, _serviceDict.serviceDelimiters);
+
+                            // Found service word from the dictionary
+                            if (serviceDelimiters != Lex.Type.Null)
                             {
-                                AddToLexemesList(lexemesList, "Delimiter", currentChar[0].ToString());
+                                AddToLexemesList(lexemesList, serviceDelimiters, bufferOfChars);
                                 ClearBuffer();
                                 _state = States.SCANNING;
                                 GetNextChar();
@@ -268,13 +269,13 @@ namespace LexicalAnalyzer
                             if (currentChar[0] == '=')
                             {
                                 AddToBuffer(currentChar[0]);
-                                AddToLexemesList(lexemesList, "Assign", bufferOfChars);
+                                AddToLexemesList(lexemesList, Lex.Type.Assign, bufferOfChars);
                                 ClearBuffer();
                                 GetNextChar();
                             }
                             else
                             {
-                                AddToLexemesList(lexemesList, "Type delimiter", bufferOfChars);
+                                AddToLexemesList(lexemesList, Lex.Type.Colon, bufferOfChars);
                             }
                             _state = States.SCANNING;
                             break;
@@ -282,7 +283,7 @@ namespace LexicalAnalyzer
                         case States.IS_COMMENT:
                             bool bClosingBlockFound = false;
 
-                            AddToLexemesList(lexemesList, "Start of comment block", bufferOfChars);
+                            AddToLexemesList(lexemesList, Lex.Type.Comment_Open, bufferOfChars);
                             ClearBuffer();
 
                             while (stringReader.Peek() >= 0)
@@ -300,7 +301,7 @@ namespace LexicalAnalyzer
                                 _state = States.ERROR;
                             }
                             
-                            AddToLexemesList(lexemesList, "End of comment block", currentChar[0].ToString());
+                            AddToLexemesList(lexemesList, Lex.Type.Comment_Close, currentChar[0].ToString());
                             _state = States.SCANNING;
                             GetNextChar();
                             break;
