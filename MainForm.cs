@@ -10,10 +10,8 @@ namespace LexicalAnalyzer
 {
     public partial class MainForm : Form
     {
-        private const bool DEV_MODE = true;
+        private const bool DEV_MODE = false;
         private bool syntaxTreeIsExpanded = false;
-        
-        private ArrayList list = new ArrayList();
 
         public MainForm()
         {
@@ -21,16 +19,28 @@ namespace LexicalAnalyzer
 
             if (DEV_MODE)
             {
-                textBox_FilePath.Text = "X:\\Dev\\Projects\\GUMRF\\LexicalAnalyzer\\Tests\\Normal code Simple.txt";
-                if (File.Exists(textBox_FilePath.Text))
+                try
                 {
-                    using (StreamReader reader = new StreamReader(textBox_FilePath.Text))
+                    textBox_FilePath.Text = "X:\\Dev\\Projects\\GUMRF\\LexicalAnalyzer\\Samples\\Sample 3.txt";
+                    if (File.Exists(textBox_FilePath.Text))
                     {
-                        string fileContent = reader.ReadToEnd();
-                        textBox_FileViewer.Text = fileContent;
-                    }
+                        using (StreamReader reader = new StreamReader(textBox_FilePath.Text))
+                        {
+                            string fileContent = reader.ReadToEnd();
+                            textBox_FileViewer.Text = fileContent;
+                        }
 
-                    fillTabsContent();
+                        fillTabsContent();
+                    }
+                    else throw new FileNotFoundException($"The following file was not found: \n{textBox_FilePath.Text}!");
+                }
+                catch (FileNotFoundException fileNotFound)
+                {
+                    MessageBox.Show(fileNotFound.Message, "File not found!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(exception.Message, this.GetType().Name, MessageBoxButtons.OK);
                 }
             }
         }
@@ -63,7 +73,6 @@ namespace LexicalAnalyzer
             catch (FileNotFoundException fileNotFound)
             {
                 MessageBox.Show(fileNotFound.Message, "File not found!", MessageBoxButtons.OK);
-                throw;
             }
             catch (Exception exception)
             {
@@ -95,21 +104,11 @@ namespace LexicalAnalyzer
         {
             try
             {
-                GetDeeperLevel(SyntaxTreeView?.Nodes[0]);
-                list.Sort();
+                throw new NotImplementedException();
             }
             catch (Exception exception)
             {
                 MessageBox.Show(exception.Message, this.GetType().Name, MessageBoxButtons.OK);
-            }
-        }
-
-        private void GetDeeperLevel(TreeNode node)
-        {
-            for (int i = 0; i < node.Nodes.Count; i++)
-            {
-                GetDeeperLevel(node.Nodes[i]);
-                list.Add(node.Nodes[i].Level);
             }
         }
 
@@ -153,6 +152,7 @@ namespace LexicalAnalyzer
 
             // Build a syntax tree
             parser.GenerateAbstractSyntaxTree(SyntaxTreeView, lexicList);
+            syntaxTreeIsExpanded = false;
         }
 
         private void button_RegenerateTreeView_Click(object sender, EventArgs e)
@@ -166,8 +166,7 @@ namespace LexicalAnalyzer
                 }
 
                 fillTabsContent();
-                SyntaxTreeView?.ExpandAll();
-                syntaxTreeIsExpanded = true;
+                button_ToggleTreeViewVisib_Click(sender, e);
             }
             
         }
