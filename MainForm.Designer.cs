@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage_SourceFile = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -101,6 +101,7 @@
             // 
             // textBox_FileViewer
             // 
+            this.textBox_FileViewer.Cursor = System.Windows.Forms.Cursors.Default;
             this.textBox_FileViewer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
             this.textBox_FileViewer.Location = new System.Drawing.Point(6, 46);
             this.textBox_FileViewer.Multiline = true;
@@ -108,7 +109,7 @@
             this.textBox_FileViewer.ReadOnly = true;
             this.textBox_FileViewer.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox_FileViewer.Size = new System.Drawing.Size(748, 369);
-            this.textBox_FileViewer.TabIndex = 2;
+            this.textBox_FileViewer.TabIndex = 3;
             // 
             // button_openFile
             // 
@@ -126,7 +127,7 @@
             this.textBox_FilePath.Location = new System.Drawing.Point(6, 19);
             this.textBox_FilePath.Name = "textBox_FilePath";
             this.textBox_FilePath.Size = new System.Drawing.Size(613, 20);
-            this.textBox_FilePath.TabIndex = 0;
+            this.textBox_FilePath.TabIndex = 2;
             this.textBox_FilePath.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_FilePath_KeyPress);
             // 
             // tabPage_LexicalTable
@@ -162,14 +163,14 @@
             this.Number,
             this.Value,
             this.Type});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.ActiveCaption;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView_table.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView_table.DefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridView_table.Location = new System.Drawing.Point(6, 19);
             this.dataGridView_table.MultiSelect = false;
             this.dataGridView_table.Name = "dataGridView_table";
@@ -234,18 +235,19 @@
             this.button_RegenerateTreeView.Location = new System.Drawing.Point(343, 18);
             this.button_RegenerateTreeView.Name = "button_RegenerateTreeView";
             this.button_RegenerateTreeView.Size = new System.Drawing.Size(129, 22);
-            this.button_RegenerateTreeView.TabIndex = 4;
+            this.button_RegenerateTreeView.TabIndex = 3;
             this.button_RegenerateTreeView.Text = "Regenerate tree";
             this.button_RegenerateTreeView.UseVisualStyleBackColor = true;
             this.button_RegenerateTreeView.Click += new System.EventHandler(this.button_RegenerateTreeView_Click);
             // 
             // button_ShowDeepestTreeView
             // 
+            this.button_ShowDeepestTreeView.Enabled = false;
             this.button_ShowDeepestTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
             this.button_ShowDeepestTreeView.Location = new System.Drawing.Point(484, 18);
             this.button_ShowDeepestTreeView.Name = "button_ShowDeepestTreeView";
             this.button_ShowDeepestTreeView.Size = new System.Drawing.Size(129, 22);
-            this.button_ShowDeepestTreeView.TabIndex = 3;
+            this.button_ShowDeepestTreeView.TabIndex = 2;
             this.button_ShowDeepestTreeView.Text = "Show deepest path";
             this.button_ShowDeepestTreeView.UseVisualStyleBackColor = true;
             this.button_ShowDeepestTreeView.Click += new System.EventHandler(this.button_ShowDeepestTreeView_Click);
@@ -256,7 +258,7 @@
             this.button_ToggleTreeViewVisib.Location = new System.Drawing.Point(625, 18);
             this.button_ToggleTreeViewVisib.Name = "button_ToggleTreeViewVisib";
             this.button_ToggleTreeViewVisib.Size = new System.Drawing.Size(129, 22);
-            this.button_ToggleTreeViewVisib.TabIndex = 2;
+            this.button_ToggleTreeViewVisib.TabIndex = 1;
             this.button_ToggleTreeViewVisib.Text = "Toggle Visibility";
             this.button_ToggleTreeViewVisib.UseVisualStyleBackColor = true;
             this.button_ToggleTreeViewVisib.Click += new System.EventHandler(this.button_ToggleTreeViewVisib_Click);
@@ -267,7 +269,7 @@
             this.SyntaxTreeView.Location = new System.Drawing.Point(6, 46);
             this.SyntaxTreeView.Name = "SyntaxTreeView";
             this.SyntaxTreeView.Size = new System.Drawing.Size(748, 369);
-            this.SyntaxTreeView.TabIndex = 0;
+            this.SyntaxTreeView.TabIndex = 4;
             // 
             // tabPage_CodeGeneration
             // 
@@ -293,6 +295,7 @@
             // 
             // button_SimpleButton
             // 
+            this.button_SimpleButton.Enabled = false;
             this.button_SimpleButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
             this.button_SimpleButton.Location = new System.Drawing.Point(484, 18);
             this.button_SimpleButton.Name = "button_SimpleButton";
@@ -303,6 +306,7 @@
             // 
             // button_AnotherButton
             // 
+            this.button_AnotherButton.Enabled = false;
             this.button_AnotherButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(254)));
             this.button_AnotherButton.Location = new System.Drawing.Point(625, 18);
             this.button_AnotherButton.Name = "button_AnotherButton";
