@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Source\Analyzer.cs" />
+    <Compile Include="Source\Lexer.cs" />
     <Compile Include="Source\Lex.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -56,6 +56,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\Parser.cs" />
+    <Compile Include="Source\ParserRules.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

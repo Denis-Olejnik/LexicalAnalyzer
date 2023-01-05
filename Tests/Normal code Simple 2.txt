@@ -1,0 +1,7 @@
+
+true_val := true;
+false_val := false;
+
+val_1 := not (true_val and false_val);
+
+val_2 := true or not (true_val xor false);
