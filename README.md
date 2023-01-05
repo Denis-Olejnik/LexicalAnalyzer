@@ -24,13 +24,13 @@ The program implements lexical and syntactic parsers. The program is written for
 
 ![Source file example](/readme/1_SourceFileExample.png)
 
-![Lexical table example](/readme/2_LexicalTableExample.png?raw=true)
+![Lexical table example](/readme/2_LexicalTableExample.png)
 
-![Syntax tree example](/readme/3_SyntaxTreeExample.png?raw=true)
+![Syntax tree example](/readme/3_SyntaxTreeExample.png)
 
-![Error example](/readme/4_ErrorExample.png?raw=true)
+![Error example](/readme/4_ErrorExample.png)
 
-This abstract syntax tree is based on the file ```\Tests\Normal code Simple.txt```
+This abstract syntax tree is based on the file ```\Samples\Sample 2.txt```
 ![Abstract syntax tree for Sample code #1](/readme/_AbstractSyntaxTree.png)
 
 
